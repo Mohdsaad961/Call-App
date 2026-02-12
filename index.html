@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<!--
+    ============================================================================
+    Contact Manager - Modern Contact Management System
+    ============================================================================
+    
+    @version     1.0.0
+    @author      Your Name / Your Company
+    @copyright   Copyright (c) 2026 Contact Manager Project
+    @license     MIT License
+    
+    ============================================================================
+-->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Modern Contact Management App">
+    <meta name="theme-color" content="#2c3e50">
+    <meta name="author" content="Contact Manager Project">
+    <meta name="copyright" content="Copyright (c) 2026 Contact Manager Project">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <title>Contact Manager | Call App</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📞</text></svg>">
+</head>
+
+<body>
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-brand">
+                <i class="fas fa-address-card"></i>
+                <span>Contact Manager</span>
+            </div>
+
+            <nav class="navbar-menu">
+                <div class="navbar-item">
+                    <a href="#" class="navbar-link">
+                        <i class="fas fa-home"></i>
+                        Home
+                    </a>
+                </div>
+
+                <div class="navbar-item dropdown">
+                    <a href="#" class="navbar-link">
+                        <i class="fas fa-info-circle"></i>
+                        About
+                        <i class="fas fa-chevron-down dropdown-icon"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="#" class="dropdown-item" onclick="showAbout(); return false;">
+                            <i class="fas fa-question-circle"></i>
+                            About App
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showFeatures(); return false;">
+                            <i class="fas fa-star"></i>
+                            Features
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showVersion(); return false;">
+                            <i class="fas fa-code-branch"></i>
+                            Version Info
+                        </a>
+                    </div>
+                </div>
+
+                <div class="navbar-item dropdown">
+                    <a href="#" class="navbar-link">
+                        <i class="fas fa-address-book"></i>
+                        Cards
+                        <i class="fas fa-chevron-down dropdown-icon"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="#" class="dropdown-item" onclick="showAllCards(); return false;">
+                            <i class="fas fa-th-large"></i>
+                            All Cards (<span id="card-count">0</span>)
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showCardStats(); return false;">
+                            <i class="fas fa-chart-pie"></i>
+                            Statistics
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="exportCards(); return false;">
+                            <i class="fas fa-download"></i>
+                            Export Cards
+                        </a>
+                    </div>
+                </div>
+
+                <div class="navbar-item dropdown">
+                    <a href="#" class="navbar-link">
+                        <i class="fas fa-list"></i>
+                        Card Details
+                        <i class="fas fa-chevron-down dropdown-icon"></i>
+                    </a>
+                    <div class="dropdown-menu card-list-menu" id="cardListMenu">
+                        <!-- Dynamically populated with contact cards -->
+                    </div>
+                </div>
+
+                <div class="navbar-item dropdown">
+                    <a href="#" class="navbar-link">
+                        <i class="fas fa-cog"></i>
+                        Settings
+                        <i class="fas fa-chevron-down dropdown-icon"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="#" class="dropdown-item" onclick="clearAllContacts(); return false;">
+                            <i class="fas fa-trash"></i>
+                            Clear All Contacts
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="importContacts(); return false;">
+                            <i class="fas fa-upload"></i>
+                            Import Contacts
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showHelp(); return false;">
+                            <i class="fas fa-question"></i>
+                            Help
+                        </a>
+                    </div>
+                </div>
+            </nav>
+
+            <button class="navbar-toggle" id="navbarToggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Contact Form Modal -->
+    <div class="form-container">
+        <form id="contactForm">
+            <span class="close-btn" aria-label="Close form">&times;</span>
+            <h1>New Contact</h1>
+
+            <div class="form-group">
+                <h3>Image URL</h3>
+                <input required type="url" id="URL" class="form-input" placeholder="https://example.com/photo.png"
+                    aria-label="Contact image URL">
+            </div>
+
+            <div class="form-group">
+                <h3>Full Name</h3>
+                <input required type="text" id="fullName" class="form-input" placeholder="Enter full name"
+                    aria-label="Contact full name">
+            </div>
+
+            <div class="form-group">
+                <h3>Home Town</h3>
+                <input required type="text" id="homeTown" class="form-input" placeholder="Enter home town"
+                    aria-label="Contact home town">
+            </div>
+
+            <div class="form-group">
+                <h3>Purpose</h3>
+                <input required type="text" id="Purpose" class="form-input" placeholder="e.g., Quick appointment note"
+                    aria-label="Contact purpose">
+            </div>
+
+            <div class="form-group">
+                <h3>Category</h3>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input required type="radio" name="priority" value="Emergency">
+                        <span>Emergency</span>
+                    </label>
+
+                    <label class="radio-item">
+                        <input required type="radio" name="priority" value="Important">
+                        <span>Important</span>
+                    </label>
+
+                    <label class="radio-item">
+                        <input required type="radio" name="priority" value="Urgent">
+                        <span>Urgent</span>
+                    </label>
+
+                    <label class="radio-item">
+                        <input required type="radio" name="priority" value="No Rush">
+                        <span>No Rush</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-buttons">
+                <button type="submit" class="btn btn-create">Create Contact</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Left Sidebar -->
+        <aside class="sidebar left-sidebar">
+            <div class="icon-group">
+                <button class="icon-circle" id="addNote" title="Add Contact" aria-label="Add new contact">
+                    <i class="fas fa-plus"></i>
+                </button>
+                <button class="icon-circle" id="prevCard" title="Previous Contact" aria-label="Previous contact">
+                    <i class="fas fa-chevron-up"></i>
+                </button>
+                <button class="icon-circle" id="nextCard" title="Next Contact" aria-label="Next contact">
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Cards Section -->
+        <main class="cards-container">
+            <div class="card-stack" id="cardStack" role="region" aria-label="Contact cards"></div>
+        </main>
+
+        <!-- Right Sidebar -->
+        <aside class="sidebar right-sidebar">
+            <section class="color-palette" aria-label="Theme color options">
+                <div class="color-grid">
+                    <button class="color-option" data-color="#3498db" aria-label="Blue theme">
+                        <div class="color-preview blue active"></div>
+                    </button>
+                    <button class="color-option" data-color="#e74c3c" aria-label="Red theme">
+                        <div class="color-preview red"></div>
+                    </button>
+                    <button class="color-option" data-color="#2ecc71" aria-label="Green theme">
+                        <div class="color-preview green"></div>
+                    </button>
+                    <button class="color-option" data-color="#f1c40f" aria-label="Yellow theme">
+                        <div class="color-preview yellow"></div>
+                    </button>
+                </div>
+            </section>
+        </aside>
+    </div>
+
+    <!-- Copyright Footer -->
+
+    <footer class="copyright-footer">
+        <p>
+            © 2026 <strong>Contact Manager</strong> |
+            Developed by <a href="#" target="_blank">Mohammad Saad Raza</a> |
+            <a href="LICENSE" target="_blank">MIT License</a>
+        </p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+
+</html>
